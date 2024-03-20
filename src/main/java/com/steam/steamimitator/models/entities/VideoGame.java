@@ -23,6 +23,12 @@ public class VideoGame {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "developer")
+    private String developer;
+
+    @Column(name = "publisher")
+    private String publisher;
+
     @Column(name = "price")
     private double price;
 
