@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -31,4 +33,15 @@ public class Account {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "client")
+    private Client client;
+
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "account_games_list",
+            joinColumns = {@JoinColumn(name = "account_id")},
+    inverseJoinColumns = {@JoinColumn(name = "video_games_id")})
+    private Set<VideoGame> videoGames = new HashSet<>();
+
 }
