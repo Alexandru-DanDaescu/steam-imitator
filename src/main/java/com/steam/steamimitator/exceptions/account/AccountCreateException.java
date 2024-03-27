@@ -1,4 +1,4 @@
-package com.steam.steamimitator.exceptions;
+package com.steam.steamimitator.exceptions.account;
 
 public class AccountCreateException extends RuntimeException{
 

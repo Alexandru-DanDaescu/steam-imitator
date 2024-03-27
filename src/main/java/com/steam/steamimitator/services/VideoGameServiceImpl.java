@@ -1,8 +1,8 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.steam.steamimitator.exceptions.VideoGameNotFoundException;
-import com.steam.steamimitator.exceptions.VideoGameUpdateException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameNotFoundException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameUpdateException;
 import com.steam.steamimitator.models.dtos.VideoGameDTO;
 import com.steam.steamimitator.models.entities.VideoGame;
 import com.steam.steamimitator.repositories.VideoGameRepository;

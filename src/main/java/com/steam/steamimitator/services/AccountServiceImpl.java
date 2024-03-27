@@ -1,8 +1,8 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.steam.steamimitator.exceptions.AccountNotFoundException;
-import com.steam.steamimitator.exceptions.AccountUpdateException;
+import com.steam.steamimitator.exceptions.account.AccountNotFoundException;
+import com.steam.steamimitator.exceptions.account.AccountUpdateException;
 import com.steam.steamimitator.models.dtos.AccountDTO;
 import com.steam.steamimitator.models.entities.Account;
 import com.steam.steamimitator.repositories.AccountRepository;
