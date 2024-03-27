@@ -25,15 +25,15 @@ public class ClientServiceImpl implements ClientService{
         this.objectMapper = objectMapper;
     }
 
-//    @Override
-//    public ClientDTO createClient(ClientDTO clientDTO) {
-//
-//        Client client = objectMapper.convertValue(clientDTO, Client.class);
-//
-//        if() {
-//
-//        }
-//    }
+    @Override
+    public ClientDTO createClient(ClientDTO clientDTO) {
+
+        Client client = objectMapper.convertValue(clientDTO, Client.class);
+
+        if() {
+
+        }
+    }
 
     @Override
     public List<ClientDTO> getClients() {

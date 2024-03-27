@@ -30,4 +30,11 @@ public class Client {
 
     @Column(name = "phone_number")
     private String phoneNumber;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address")
+    private Address address;
+
+    @OneToOne(mappedBy = "account")
+    private Account account;
 }

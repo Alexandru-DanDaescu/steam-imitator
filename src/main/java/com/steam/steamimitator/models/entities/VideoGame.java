@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -40,4 +41,7 @@ public class VideoGame {
 
     @Column(name = "language_supported")
     private Set<String> languageSupported;
+
+    @ManyToMany(mappedBy = "accounts")
+    private Set<Account> accounts = new HashSet<>();
 }
