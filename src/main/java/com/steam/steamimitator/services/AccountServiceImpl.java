@@ -39,12 +39,12 @@ public class AccountServiceImpl implements AccountService{
 
         Account account = objectMapper.convertValue(accountDTO, Account.class);
 
-        Account accountResponseEntity = null;
+        Account savedAccountEntity = null;
 
         if(account.getUserName() != null || account.getPassword() != null || account.getEmail() != null){
-            accountResponseEntity = accountRepository.save(account);
+            savedAccountEntity = accountRepository.save(account);
         }
-        return convertToDTO(accountResponseEntity);
+        return convertToDTO(savedAccountEntity);
     }
 
     @Override
@@ -100,6 +100,7 @@ public class AccountServiceImpl implements AccountService{
         account.setPassword(accountDTO.getPassword());
         account.setEmail(accountDTO.getEmail());
         account.setCreatedAt(accountDTO.getCreatedAt());
+
         return account;
     }
 
