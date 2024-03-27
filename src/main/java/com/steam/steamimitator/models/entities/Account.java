@@ -43,5 +43,4 @@ public class Account {
             joinColumns = {@JoinColumn(name = "account_id")},
     inverseJoinColumns = {@JoinColumn(name = "video_games_id")})
     private Set<VideoGame> videoGames = new HashSet<>();
-
 }
