@@ -1,5 +1,14 @@
 package com.steam.steamimitator.exceptions;
 
+import com.steam.steamimitator.exceptions.account.AccountCreateException;
+import com.steam.steamimitator.exceptions.account.AccountNotFoundException;
+import com.steam.steamimitator.exceptions.account.AccountUpdateException;
+import com.steam.steamimitator.exceptions.client.ClientCreateException;
+import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
+import com.steam.steamimitator.exceptions.client.ClientUpdateException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameCreateException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameNotFoundException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameUpdateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

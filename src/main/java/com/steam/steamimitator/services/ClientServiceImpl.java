@@ -1,12 +1,9 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.steam.steamimitator.exceptions.ClientNotFoundException;
-import com.steam.steamimitator.exceptions.ClientUpdateException;
-import com.steam.steamimitator.models.dtos.AccountDTO;
-import com.steam.steamimitator.models.dtos.AddressDTO;
+import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
+import com.steam.steamimitator.exceptions.client.ClientUpdateException;
 import com.steam.steamimitator.models.dtos.ClientDTO;
-import com.steam.steamimitator.models.entities.Account;
 import com.steam.steamimitator.models.entities.Address;
 import com.steam.steamimitator.models.entities.Client;
 import com.steam.steamimitator.repositories.AddressRepository;

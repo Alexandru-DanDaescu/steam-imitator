@@ -1,4 +1,4 @@
-package com.steam.steamimitator.exceptions;
+package com.steam.steamimitator.exceptions.videogame;
 
 public class VideoGameUpdateException extends RuntimeException{
 
