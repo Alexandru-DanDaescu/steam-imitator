@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final VideoGameRepository videoGameRepository;
@@ -41,7 +41,7 @@ public class AccountServiceImpl implements AccountService{
 
         Account savedAccountEntity = null;
 
-        if(account.getUserName() != null || account.getPassword() != null || account.getEmail() != null){
+        if (account.getUserName() != null || account.getPassword() != null || account.getEmail() != null) {
             savedAccountEntity = accountRepository.save(account);
         }
         return convertToDTO(savedAccountEntity);
@@ -54,15 +54,15 @@ public class AccountServiceImpl implements AccountService{
             List<Account> accountList = accountRepository.findAll();
             List<AccountDTO> accountDTOList = new ArrayList<>();
 
-            for (Account account : accountList){
+            for (Account account : accountList) {
                 accountDTOList.add(convertToDTO(account));
             }
 
-            if(accountDTOList.isEmpty()){
+            if (accountDTOList.isEmpty()) {
                 throw new AccountNotFoundException("Accounts can't be found because they don't exist.");
             }
             return accountDTOList;
-        } catch (AccountNotFoundException e){
+        } catch (AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
@@ -75,10 +75,9 @@ public class AccountServiceImpl implements AccountService{
                     .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id + " not found"));
             Account savedAccount = accountRepository.save(updatedAccount);
             return convertToDTO(savedAccount);
-        } catch (AccountNotFoundException e){
+        } catch (AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new AccountUpdateException("Failed to update account with id: " + id, e);
         }
     }
@@ -90,12 +89,12 @@ public class AccountServiceImpl implements AccountService{
                     .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id +
                             " cannot be deleted because it couldn't be found"));
             accountRepository.delete(account);
-        } catch (AccountNotFoundException e){
+        } catch (AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
-    private Account updateAccountValues(Account account, AccountDTO accountDTO){
+    private Account updateAccountValues(Account account, AccountDTO accountDTO) {
         account.setUserName(accountDTO.getUserName());
         account.setPassword(accountDTO.getPassword());
         account.setEmail(accountDTO.getEmail());
@@ -104,7 +103,7 @@ public class AccountServiceImpl implements AccountService{
         return account;
     }
 
-    private AccountDTO convertToDTO(Account account){
+    private AccountDTO convertToDTO(Account account) {
         return objectMapper.convertValue(account, AccountDTO.class);
     }
 }

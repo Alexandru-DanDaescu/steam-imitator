@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class ClientServiceImpl implements ClientService{
+public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final AddressRepository addressRepository;
@@ -36,7 +36,7 @@ public class ClientServiceImpl implements ClientService{
 
         Client clientEntity = objectMapper.convertValue(clientDTO, Client.class);
 
-        if(clientEntity.getAddress() != null){
+        if (clientEntity.getAddress() != null) {
             Address addressEntity = addressRepository.save(clientEntity.getAddress());
             clientEntity.setAddress(addressEntity);
         }
@@ -51,15 +51,15 @@ public class ClientServiceImpl implements ClientService{
             List<Client> clientList = clientRepository.findAll();
             List<ClientDTO> clientDTOList = new ArrayList<>();
 
-            for(Client client : clientList){
+            for (Client client : clientList) {
                 clientDTOList.add(convertToDTO(client));
             }
 
-            if(clientDTOList.isEmpty()) {
+            if (clientDTOList.isEmpty()) {
                 throw new ClientNotFoundException("Clients couldn't be found because they dont exist");
             }
             return clientDTOList;
-        } catch (ClientNotFoundException e){
+        } catch (ClientNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
@@ -73,11 +73,9 @@ public class ClientServiceImpl implements ClientService{
 
             Client savedClient = clientRepository.save(updatedClient);
             return convertToDTO(savedClient);
-        } catch (ClientNotFoundException e){
+        } catch (ClientNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
-
-        catch (Exception e){
+        } catch (Exception e) {
             throw new ClientUpdateException("Failed to update client with id: " + id, e);
         }
     }
@@ -94,7 +92,7 @@ public class ClientServiceImpl implements ClientService{
 
     }
 
-    private Client updateClientValues(Client client, ClientDTO clientDTO){
+    private Client updateClientValues(Client client, ClientDTO clientDTO) {
         client.setFullName(clientDTO.getFullName());
         client.setDateOfBirth(clientDTO.getDateOfBirth());
         client.setGender(clientDTO.getGender());
@@ -103,7 +101,7 @@ public class ClientServiceImpl implements ClientService{
         return client;
     }
 
-    private ClientDTO convertToDTO(Client client){
+    private ClientDTO convertToDTO(Client client) {
         return objectMapper.convertValue(client, ClientDTO.class);
     }
 }

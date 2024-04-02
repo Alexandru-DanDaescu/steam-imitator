@@ -1,8 +1,6 @@
 package com.steam.steamimitator.models.dtos;
 
 
-
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
 import java.util.Set;
+
 @Data
 @Validated
 public class VideoGameDTO implements Serializable {
