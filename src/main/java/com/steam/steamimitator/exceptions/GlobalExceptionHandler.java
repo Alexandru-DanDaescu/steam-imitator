@@ -1,5 +1,14 @@
 package com.steam.steamimitator.exceptions;
 
+import com.steam.steamimitator.exceptions.account.AccountCreateException;
+import com.steam.steamimitator.exceptions.account.AccountNotFoundException;
+import com.steam.steamimitator.exceptions.account.AccountUpdateException;
+import com.steam.steamimitator.exceptions.client.ClientCreateException;
+import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
+import com.steam.steamimitator.exceptions.client.ClientUpdateException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameCreateException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameNotFoundException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameUpdateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,7 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccountCreateException.class)
-    public ResponseEntity<ApiErrorResponse> handleAccountCreateException(AccountCreateException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleAccountCreateException(AccountCreateException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
@@ -21,7 +30,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccountNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleAccountNotFoundException(AccountNotFoundException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleAccountNotFoundException(AccountNotFoundException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
@@ -32,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AccountUpdateException.class)
-    public ResponseEntity<ApiErrorResponse> handleAccountUpdateException(AccountUpdateException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleAccountUpdateException(AccountUpdateException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
@@ -43,7 +52,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ClientCreateException.class)
-    public ResponseEntity<ApiErrorResponse> handleClientCreateException(ClientCreateException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleClientCreateException(ClientCreateException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
@@ -54,7 +63,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ClientNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleClientNotFoundException(ClientNotFoundException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleClientNotFoundException(ClientNotFoundException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
@@ -65,7 +74,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ClientUpdateException.class)
-    public ResponseEntity<ApiErrorResponse> handleClientUpdateException(ClientUpdateException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleClientUpdateException(ClientUpdateException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),
@@ -76,7 +85,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(VideoGameCreateException.class)
-    public ResponseEntity<ApiErrorResponse> handleVideoGameCreateException(VideoGameCreateException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleVideoGameCreateException(VideoGameCreateException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.BAD_REQUEST.value(),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
@@ -87,7 +96,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(VideoGameNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleVideoGameNotFoundException(VideoGameNotFoundException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleVideoGameNotFoundException(VideoGameNotFoundException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.NOT_FOUND.value(),
                 HttpStatus.NOT_FOUND.getReasonPhrase(),
@@ -98,7 +107,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(VideoGameUpdateException.class)
-    public ResponseEntity<ApiErrorResponse> handleVideoGameUpdateException(VideoGameUpdateException ex, WebRequest request){
+    public ResponseEntity<ApiErrorResponse> handleVideoGameUpdateException(VideoGameUpdateException ex, WebRequest request) {
         ApiErrorResponse apiErrorResponse = new ApiErrorResponse(
                 HttpStatus.CONFLICT.value(),
                 HttpStatus.CONFLICT.getReasonPhrase(),

@@ -1,8 +1,8 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.steam.steamimitator.exceptions.AccountNotFoundException;
-import com.steam.steamimitator.exceptions.AccountUpdateException;
+import com.steam.steamimitator.exceptions.account.AccountNotFoundException;
+import com.steam.steamimitator.exceptions.account.AccountUpdateException;
 import com.steam.steamimitator.models.dtos.AccountDTO;
 import com.steam.steamimitator.models.entities.Account;
 import com.steam.steamimitator.repositories.AccountRepository;
@@ -18,7 +18,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final VideoGameRepository videoGameRepository;
@@ -39,12 +39,12 @@ public class AccountServiceImpl implements AccountService{
 
         Account account = objectMapper.convertValue(accountDTO, Account.class);
 
-        Account accountResponseEntity = null;
+        Account savedAccountEntity = null;
 
-        if(account.getUserName() != null || account.getPassword() != null || account.getEmail() != null){
-            accountResponseEntity = accountRepository.save(account);
+        if (account.getUserName() != null || account.getPassword() != null || account.getEmail() != null) {
+            savedAccountEntity = accountRepository.save(account);
         }
-        return convertToDTO(accountResponseEntity);
+        return convertToDTO(savedAccountEntity);
     }
 
     @Override
@@ -54,15 +54,15 @@ public class AccountServiceImpl implements AccountService{
             List<Account> accountList = accountRepository.findAll();
             List<AccountDTO> accountDTOList = new ArrayList<>();
 
-            for (Account account : accountList){
+            for (Account account : accountList) {
                 accountDTOList.add(convertToDTO(account));
             }
 
-            if(accountDTOList.isEmpty()){
+            if (accountDTOList.isEmpty()) {
                 throw new AccountNotFoundException("Accounts can't be found because they don't exist.");
             }
             return accountDTOList;
-        } catch (AccountNotFoundException e){
+        } catch (AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
@@ -75,10 +75,9 @@ public class AccountServiceImpl implements AccountService{
                     .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id + " not found"));
             Account savedAccount = accountRepository.save(updatedAccount);
             return convertToDTO(savedAccount);
-        } catch (AccountNotFoundException e){
+        } catch (AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             throw new AccountUpdateException("Failed to update account with id: " + id, e);
         }
     }
@@ -90,20 +89,21 @@ public class AccountServiceImpl implements AccountService{
                     .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id +
                             " cannot be deleted because it couldn't be found"));
             accountRepository.delete(account);
-        } catch (AccountNotFoundException e){
+        } catch (AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
     }
 
-    private Account updateAccountValues(Account account, AccountDTO accountDTO){
+    private Account updateAccountValues(Account account, AccountDTO accountDTO) {
         account.setUserName(accountDTO.getUserName());
         account.setPassword(accountDTO.getPassword());
         account.setEmail(accountDTO.getEmail());
         account.setCreatedAt(accountDTO.getCreatedAt());
+
         return account;
     }
 
-    private AccountDTO convertToDTO(Account account){
+    private AccountDTO convertToDTO(Account account) {
         return objectMapper.convertValue(account, AccountDTO.class);
     }
 }

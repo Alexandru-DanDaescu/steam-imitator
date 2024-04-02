@@ -9,7 +9,7 @@ public record ApiErrorResponse(
         String message,
         String path
 ) {
-    public ApiErrorResponse(int status, String error, String message, String path){
-        this(LocalDateTime.now(), status, error ,message, path);
+    public ApiErrorResponse(int status, String error, String message, String path) {
+        this(LocalDateTime.now(), status, error, message, path);
     }
 }
