@@ -42,6 +42,6 @@ public class VideoGame {
     @Column(name = "language_supported")
     private Set<String> languageSupported;
 
-    @ManyToMany(mappedBy = "accounts")
+    @ManyToMany(mappedBy = "videoGames")
     private Set<Account> accounts = new HashSet<>();
 }
