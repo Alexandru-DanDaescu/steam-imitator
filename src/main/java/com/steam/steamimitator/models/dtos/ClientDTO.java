@@ -28,4 +28,7 @@ public class ClientDTO implements Serializable {
 
     @NotEmpty(message = "Client phoneNumber field cannot be empty")
     private String phoneNumber;
+
+    @NotNull(message = "Address is required")
+    private AddressDTO addressDTO;
 }

@@ -26,6 +26,6 @@ public class AccountDTO implements Serializable {
     private String email;
 
     @NotNull(message = "Account createdAt field is required")
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'hh:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss", iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime createdAt;
 }
