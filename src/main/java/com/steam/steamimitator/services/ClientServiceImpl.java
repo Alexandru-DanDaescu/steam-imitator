@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +63,29 @@ public class ClientServiceImpl implements ClientService {
             if (clientDTOList.isEmpty()) {
                 throw new ClientNotFoundException("Clients couldn't be found because they don't exist");
             }
+            return clientDTOList;
+        } catch (ClientNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<ClientDTO> sortClientsByCriteria(String fullName, LocalDate dateOfBirth, String gender) {
+
+        try {
+            List<Client> clientList = clientRepository.findAll();
+
+            List<ClientDTO> clientDTOList = clientList.stream()
+                    .filter(client -> client.getFullName().equals(fullName))
+                    .filter(client -> client.getDateOfBirth().equals(dateOfBirth))
+                    .filter(client -> client.getGender().equals(gender))
+                    .map(this::convertToDTO)
+                    .toList();
+
+            if (clientDTOList.isEmpty()) {
+                throw new ClientNotFoundException("Clients with matching criteria couldn't be found");
+            }
+
             return clientDTOList;
         } catch (ClientNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);

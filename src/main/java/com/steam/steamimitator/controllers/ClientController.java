@@ -4,10 +4,12 @@ package com.steam.steamimitator.controllers;
 import com.steam.steamimitator.models.dtos.ClientDTO;
 import com.steam.steamimitator.services.ClientService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -28,6 +30,22 @@ public class ClientController {
     @GetMapping("/clients")
     public ResponseEntity<List<ClientDTO>> getClients() {
         List<ClientDTO> clientDTOList = clientService.getClients();
+        if (clientDTOList.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(clientDTOList);
+        }
+    }
+
+    @GetMapping("/clients-criteria")
+    public ResponseEntity<List<ClientDTO>> sortClientsByCriteria(@RequestParam(required = false) String fullName,
+                                                                 @RequestParam(required = false)
+                                                                 @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                 LocalDate dateOfBirth,
+                                                                 @RequestParam(required = false) String gender) {
+
+        List<ClientDTO> clientDTOList = clientService.sortClientsByCriteria(fullName,dateOfBirth,gender);
+
         if (clientDTOList.isEmpty()) {
             return ResponseEntity.noContent().build();
         } else {
