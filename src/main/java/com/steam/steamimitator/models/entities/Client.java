@@ -33,9 +33,8 @@ public class Client {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "address")
-    @JsonIgnore
     private Address address;
 
     @OneToOne(mappedBy = "client")
