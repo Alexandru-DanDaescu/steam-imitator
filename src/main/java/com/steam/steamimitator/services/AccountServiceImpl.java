@@ -1,6 +1,7 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.steam.steamimitator.exceptions.account.AccountCreateException;
 import com.steam.steamimitator.exceptions.account.AccountNotFoundException;
 import com.steam.steamimitator.exceptions.account.AccountUpdateException;
 import com.steam.steamimitator.models.dtos.AccountDTO;
@@ -36,6 +37,10 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public AccountDTO createAccount(AccountDTO accountDTO) {
+        if (accountRepository.existsByEmail(accountDTO.getEmail()) ||
+                accountRepository.existsByUserName(accountDTO.getUserName())) {
+            throw new AccountCreateException("Account with this email or password already exists.");
+        }
 
         Account account = objectMapper.convertValue(accountDTO, Account.class);
 

@@ -5,4 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface VideoGameRepository extends JpaRepository<VideoGame, Long> {
+
+    boolean existsByTitle(String title);
 }

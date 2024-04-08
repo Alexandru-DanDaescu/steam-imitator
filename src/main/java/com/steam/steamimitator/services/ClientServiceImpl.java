@@ -1,6 +1,7 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.steam.steamimitator.exceptions.client.ClientCreateException;
 import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
 import com.steam.steamimitator.exceptions.client.ClientUpdateException;
 import com.steam.steamimitator.models.dtos.ClientDTO;
@@ -33,6 +34,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDTO createClient(ClientDTO clientDTO) {
+        if (clientRepository.existsByFullName(clientDTO.getFullName())) {
+            throw new ClientCreateException("Client already exists");
+        }
 
         Client clientEntity = objectMapper.convertValue(clientDTO, Client.class);
 
