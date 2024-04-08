@@ -30,5 +30,5 @@ public class ClientDTO implements Serializable {
     private String phoneNumber;
 
     @NotNull(message = "Address is required")
-    private AddressDTO addressDTO;
+    private AddressDTO address;
 }

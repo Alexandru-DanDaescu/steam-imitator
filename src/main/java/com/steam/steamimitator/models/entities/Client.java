@@ -1,5 +1,6 @@
 package com.steam.steamimitator.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,6 +37,6 @@ public class Client {
     @JoinColumn(name = "address")
     private Address address;
 
-    @OneToOne(mappedBy = "account")
+    @OneToOne(mappedBy = "client")
     private Account account;
 }

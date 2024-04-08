@@ -56,7 +56,7 @@ public class ClientServiceImpl implements ClientService {
             }
 
             if (clientDTOList.isEmpty()) {
-                throw new ClientNotFoundException("Clients couldn't be found because they dont exist");
+                throw new ClientNotFoundException("Clients couldn't be found because they don't exist");
             }
             return clientDTOList;
         } catch (ClientNotFoundException e) {
