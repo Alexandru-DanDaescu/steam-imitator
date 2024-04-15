@@ -1,6 +1,7 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.steam.steamimitator.exceptions.videogame.VideoGameCreateException;
 import com.steam.steamimitator.exceptions.videogame.VideoGameNotFoundException;
 import com.steam.steamimitator.exceptions.videogame.VideoGameUpdateException;
 import com.steam.steamimitator.models.dtos.VideoGameDTO;
@@ -28,6 +29,10 @@ public class VideoGameServiceImpl implements VideoGameService {
 
     @Override
     public VideoGameDTO createVideoGame(VideoGameDTO videoGameDTO) {
+        if (videoGameRepository.existsByTitle(videoGameDTO.getTitle())) {
+            throw new VideoGameCreateException("Video game already exists");
+        }
+
         VideoGame videoGameEntity = objectMapper.convertValue(videoGameDTO, VideoGame.class);
 
         VideoGame videoGameSavedEntity = null;

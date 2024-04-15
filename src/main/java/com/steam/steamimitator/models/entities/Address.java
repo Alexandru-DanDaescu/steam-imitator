@@ -1,5 +1,6 @@
 package com.steam.steamimitator.models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,5 +36,6 @@ public class Address {
     private String country;
 
     @OneToOne(mappedBy = "address")
+    @JsonIgnore
     private Client client;
 }

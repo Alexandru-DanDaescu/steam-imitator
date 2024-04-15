@@ -1,6 +1,7 @@
 package com.steam.steamimitator.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.steam.steamimitator.exceptions.client.ClientCreateException;
 import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
 import com.steam.steamimitator.exceptions.client.ClientUpdateException;
 import com.steam.steamimitator.models.dtos.ClientDTO;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDTO createClient(ClientDTO clientDTO) {
+        if (clientRepository.existsByFullName(clientDTO.getFullName())) {
+            throw new ClientCreateException("Client already exists");
+        }
 
         Client clientEntity = objectMapper.convertValue(clientDTO, Client.class);
 
@@ -58,6 +63,29 @@ public class ClientServiceImpl implements ClientService {
             if (clientDTOList.isEmpty()) {
                 throw new ClientNotFoundException("Clients couldn't be found because they don't exist");
             }
+            return clientDTOList;
+        } catch (ClientNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public List<ClientDTO> sortClientsByCriteria(String fullName, LocalDate dateOfBirth, String gender) {
+
+        try {
+            List<Client> clientList = clientRepository.findAll();
+
+            List<ClientDTO> clientDTOList = clientList.stream()
+                    .filter(client -> client.getFullName().equals(fullName))
+                    .filter(client -> client.getDateOfBirth().equals(dateOfBirth))
+                    .filter(client -> client.getGender().equals(gender))
+                    .map(this::convertToDTO)
+                    .toList();
+
+            if (clientDTOList.isEmpty()) {
+                throw new ClientNotFoundException("Clients with matching criteria couldn't be found");
+            }
+
             return clientDTOList;
         } catch (ClientNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
