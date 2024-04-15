@@ -37,12 +37,12 @@ public class ClientController {
         }
     }
 
-    @GetMapping("/clients-criteria")
-    public ResponseEntity<List<ClientDTO>> sortClientsByCriteria(@RequestParam(required = false) String fullName,
-                                                                 @RequestParam(required = false)
+    @GetMapping("/clients-criteria/{fullName}/{dateOfBirth}/{gender}")
+    public ResponseEntity<List<ClientDTO>> sortClientsByCriteria(@PathVariable String fullName,
+                                                                 @PathVariable
                                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                  LocalDate dateOfBirth,
-                                                                 @RequestParam(required = false) String gender) {
+                                                                 @PathVariable String gender) {
 
         List<ClientDTO> clientDTOList = clientService.sortClientsByCriteria(fullName,dateOfBirth,gender);
 
