@@ -12,5 +12,9 @@ public interface AccountService {
 
     AccountDTO updateAccount(Long id, AccountDTO accountDTO);
 
+    AccountDTO addGamesToAccount(Long accountId, Long[] gameIds);
+
     void deleteAccount(Long id);
+
+    void addClientToAccount(Long clientId, Long accountId);
 }

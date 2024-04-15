@@ -41,6 +41,13 @@ public class AccountController {
         return ResponseEntity.ok().body(updateAccountDTO);
     }
 
+    @PatchMapping("/accounts/{accountId}/clients/{clientId}")
+    public ResponseEntity<String> addClientToAccount(@PathVariable Long clientId, @PathVariable Long accountId){
+        accountService.addClientToAccount(clientId, accountId);
+        return ResponseEntity.ok("Client with id: " + clientId +
+                " successfully added to account with id: " + accountId);
+    }
+
     @DeleteMapping("/accounts/{id}")
     public ResponseEntity<String> deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);

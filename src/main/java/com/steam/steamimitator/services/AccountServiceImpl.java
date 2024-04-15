@@ -4,8 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steam.steamimitator.exceptions.account.AccountCreateException;
 import com.steam.steamimitator.exceptions.account.AccountNotFoundException;
 import com.steam.steamimitator.exceptions.account.AccountUpdateException;
+import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
 import com.steam.steamimitator.models.dtos.AccountDTO;
 import com.steam.steamimitator.models.entities.Account;
+import com.steam.steamimitator.models.entities.Client;
 import com.steam.steamimitator.repositories.AccountRepository;
 import com.steam.steamimitator.repositories.ClientRepository;
 import com.steam.steamimitator.repositories.VideoGameRepository;
@@ -85,6 +87,28 @@ public class AccountServiceImpl implements AccountService {
         } catch (Exception e) {
             throw new AccountUpdateException("Failed to update account with id: " + id, e);
         }
+    }
+
+    @Override
+    public void addClientToAccount(Long clientId, Long accountId) {
+        try {
+            Client client = clientRepository.getClientById(clientId)
+                    .orElseThrow(() -> new ClientNotFoundException("Client with id: " + clientId + " not found."));
+
+            Account account = accountRepository.getAccountById(accountId)
+                    .orElseThrow(() -> new AccountNotFoundException("account with id:" + accountId + " not found."));
+
+            account.setClient(client);
+
+            accountRepository.save(account);
+        } catch (ClientNotFoundException | AccountNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @Override
+    public AccountDTO addGamesToAccount(Long accountId, Long[] gameIds) {
+        return null;
     }
 
     @Override
