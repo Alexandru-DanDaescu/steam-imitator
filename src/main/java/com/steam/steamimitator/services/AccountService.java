@@ -4,6 +4,7 @@ import com.steam.steamimitator.models.dtos.AccountDTO;
 
 import java.util.List;
 
+
 public interface AccountService {
 
     AccountDTO createAccount(AccountDTO accountDTO);
@@ -12,9 +13,9 @@ public interface AccountService {
 
     AccountDTO updateAccount(Long id, AccountDTO accountDTO);
 
-    AccountDTO addGamesToAccount(Long accountId, Long[] gameIds);
-
     void deleteAccount(Long id);
 
     void addClientToAccount(Long clientId, Long accountId);
+
+    void addGamesToUserAccount(Long accountId, Long[] videoGamesIds);
 }

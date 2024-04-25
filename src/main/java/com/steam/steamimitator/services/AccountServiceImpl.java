@@ -5,9 +5,12 @@ import com.steam.steamimitator.exceptions.account.AccountCreateException;
 import com.steam.steamimitator.exceptions.account.AccountNotFoundException;
 import com.steam.steamimitator.exceptions.account.AccountUpdateException;
 import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
+import com.steam.steamimitator.exceptions.videogame.VideoGameNotFoundException;
 import com.steam.steamimitator.models.dtos.AccountDTO;
+import com.steam.steamimitator.models.dtos.VideoGameDTO;
 import com.steam.steamimitator.models.entities.Account;
 import com.steam.steamimitator.models.entities.Client;
+import com.steam.steamimitator.models.entities.VideoGame;
 import com.steam.steamimitator.repositories.AccountRepository;
 import com.steam.steamimitator.repositories.ClientRepository;
 import com.steam.steamimitator.repositories.VideoGameRepository;
@@ -17,11 +20,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class AccountServiceImpl implements AccountService {
+
+    private static final String ID_NOT_FOUND = " not found.";
 
     private final AccountRepository accountRepository;
     private final VideoGameRepository videoGameRepository;
@@ -79,7 +87,7 @@ public class AccountServiceImpl implements AccountService {
         try {
             Account updatedAccount = accountRepository.findById(id)
                     .map(account -> updateAccountValues(account, accountDTO))
-                    .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id + " not found"));
+                    .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id + ID_NOT_FOUND));
             Account savedAccount = accountRepository.save(updatedAccount);
             return convertToDTO(savedAccount);
         } catch (AccountNotFoundException e) {
@@ -93,10 +101,10 @@ public class AccountServiceImpl implements AccountService {
     public void addClientToAccount(Long clientId, Long accountId) {
         try {
             Client client = clientRepository.getClientById(clientId)
-                    .orElseThrow(() -> new ClientNotFoundException("Client with id: " + clientId + " not found."));
+                    .orElseThrow(() -> new ClientNotFoundException("Client with id: " + clientId + ID_NOT_FOUND));
 
             Account account = accountRepository.getAccountById(accountId)
-                    .orElseThrow(() -> new AccountNotFoundException("account with id:" + accountId + " not found."));
+                    .orElseThrow(() -> new AccountNotFoundException("account with id:" + accountId + ID_NOT_FOUND));
 
             account.setClient(client);
 
@@ -107,8 +115,29 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public AccountDTO addGamesToAccount(Long accountId, Long[] gameIds) {
-        return null;
+    public void addGamesToUserAccount(Long accountId, Long[] videoGamesIds) {
+        try {
+            Account account = accountRepository.getAccountById(accountId)
+                    .orElseThrow(() -> new VideoGameNotFoundException("Account with id:" + accountId + ID_NOT_FOUND));
+
+            for(Long videoGameId : videoGamesIds) {
+                VideoGame videoGame = videoGameRepository.findById(videoGameId)
+                        .orElseThrow(() -> new VideoGameNotFoundException("Videogame with id:" + videoGameId + ID_NOT_FOUND));
+
+                if(!account.getVideoGames().contains(videoGame)) {
+                    account.getVideoGames().add(videoGame);
+                    videoGame.getAccounts().add(account);
+                }
+                else {
+                    throw new VideoGameNotFoundException("Video game with id: " + videoGameId +
+                            " is already associated with the account.");
+                }
+            }
+            accountRepository.save(account);
+
+        } catch (AccountNotFoundException | VideoGameNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
     }
 
     @Override
@@ -135,4 +164,6 @@ public class AccountServiceImpl implements AccountService {
     private AccountDTO convertToDTO(Account account) {
         return objectMapper.convertValue(account, AccountDTO.class);
     }
+
 }
+

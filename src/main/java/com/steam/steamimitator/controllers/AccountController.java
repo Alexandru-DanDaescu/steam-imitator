@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -46,6 +47,14 @@ public class AccountController {
         accountService.addClientToAccount(clientId, accountId);
         return ResponseEntity.ok("Client with id: " + clientId +
                 " successfully added to account with id: " + accountId);
+    }
+
+    @PatchMapping("/account-video-games/{accountId}/{videoGamesIds}")
+    public ResponseEntity<String> addGamesToUserAccount(@PathVariable Long accountId,
+                                                        @PathVariable Long[] videoGamesIds){
+        accountService.addGamesToUserAccount(accountId, videoGamesIds);
+        return  ResponseEntity.ok("Video games with ids: " +
+                Arrays.toString(videoGamesIds) + " added successfully to account with id: " + accountId);
     }
 
     @DeleteMapping("/accounts/{id}")
