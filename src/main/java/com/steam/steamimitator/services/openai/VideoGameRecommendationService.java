@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @Service
 public class VideoGameRecommendationService {
 
-    //WIP
     private final OpenAiService openAiService;
 
     public VideoGameRecommendationService(OpenAiService openAiService) {

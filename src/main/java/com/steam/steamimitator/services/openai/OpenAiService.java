@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -19,8 +20,8 @@ import java.util.Map;
 public class OpenAiService {
 
     private final RestTemplate restTemplate;
-    private final String apiKey = "YOUR_OPENAI_API_KEY";
-    private final String openAIUrl = "https://api.openai.com/v1/engines/davinci-codex/completions";
+    private static final String APIKEY = "YOUR_KEY_HERE";
+    private static final String OPEN_AI_URL = "https://api.openai.com/v1/chat/completions";
 
     public OpenAiService(RestTemplateBuilder restTemplateBuilder){
         this.restTemplate = restTemplateBuilder.build();
@@ -31,14 +32,19 @@ public class OpenAiService {
     public String getRecommendations(String prompt) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(apiKey);
+        headers.setBearerAuth(APIKEY);
+
+        Map<String, Object> message = new HashMap<>();
+        message.put("role", "user");
+        message.put("content", prompt);
 
         Map<String, Object> request = new HashMap<>();
-        request.put("prompt", prompt);
-        request.put("maxTokens", 200);
+        request.put("model", "gpt-3.5-turbo");
+        request.put("messages", List.of(message));
+        request.put("max_tokens", 100);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(openAIUrl, entity, String.class);
+        ResponseEntity<String> response = restTemplate.postForEntity(OPEN_AI_URL, entity, String.class);
 
         return response.getBody();
     }
