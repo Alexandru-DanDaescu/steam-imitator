@@ -8,6 +8,8 @@ import com.steam.steamimitator.models.dtos.VideoGameDTO;
 import com.steam.steamimitator.models.entities.VideoGame;
 import com.steam.steamimitator.repositories.VideoGameRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -46,6 +48,7 @@ public class VideoGameServiceImpl implements VideoGameService {
     }
 
     @Override
+    @Cacheable(value = "videoGames")
     public List<VideoGameDTO> getVideoGames() {
         try {
             List<VideoGame> videoGameList = videoGameRepository.findAll();
@@ -65,6 +68,7 @@ public class VideoGameServiceImpl implements VideoGameService {
     }
 
     @Override
+    @CacheEvict(value = "videoGames", key = "#id")
     public VideoGameDTO updateVideoGame(Long id, VideoGameDTO videoGameDTO) {
         try {
             VideoGame updatedVideoGame = videoGameRepository.findById(id)
@@ -80,6 +84,7 @@ public class VideoGameServiceImpl implements VideoGameService {
     }
 
     @Override
+    @CacheEvict(value = "videoGames", key = "#id")
     public void deleteVideoGame(Long id) {
         try {
             VideoGame videoGame = videoGameRepository.findById(id)
