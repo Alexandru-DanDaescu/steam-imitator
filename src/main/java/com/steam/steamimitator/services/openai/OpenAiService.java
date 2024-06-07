@@ -22,6 +22,7 @@ public class OpenAiService {
     private final RestTemplate restTemplate;
     private static final String APIKEY = "YOUR_KEY_HERE";
     private static final String OPEN_AI_URL = "https://api.openai.com/v1/chat/completions";
+    private final RateLimiter rateLimiter = new RateLimiter(10.0);
 
     public OpenAiService(RestTemplateBuilder restTemplateBuilder){
         this.restTemplate = restTemplateBuilder.build();
@@ -30,6 +31,8 @@ public class OpenAiService {
 
 
     public String getRecommendations(String prompt) {
+        rateLimiter.acquire();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setBearerAuth(APIKEY);

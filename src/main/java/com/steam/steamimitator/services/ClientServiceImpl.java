@@ -11,6 +11,7 @@ import com.steam.steamimitator.repositories.AddressRepository;
 import com.steam.steamimitator.repositories.ClientRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -97,7 +98,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    @CacheEvict(value = "clients", key = "#id")
+    @CachePut(value = "clients", key = "#id")
     public ClientDTO updateClient(Long id, ClientDTO clientDTO) {
         try {
             Client updatedClient = clientRepository.findById(id)
