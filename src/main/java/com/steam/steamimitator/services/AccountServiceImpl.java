@@ -16,6 +16,7 @@ import com.steam.steamimitator.repositories.ClientRepository;
 import com.steam.steamimitator.repositories.VideoGameRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -86,7 +87,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @CacheEvict(value = "accounts", key = "#id")
+    @CachePut(value = "accounts", key = "#id")
     public AccountDTO updateAccount(Long id, AccountDTO accountDTO) {
         try {
             Account updatedAccount = accountRepository.findById(id)
@@ -102,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @CacheEvict(value = "accounts", key = "#clientId + '|' + #accountId")
+    @CachePut(value = "accounts", key = "#clientId + '|' + #accountId")
     public void addClientToAccount(Long clientId, Long accountId) {
         try {
             Client client = clientRepository.getClientById(clientId)
@@ -120,7 +121,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    @CacheEvict(value = "accounts", key = "#accountId + '|' + #videoGamesIds")
+    @CachePut(value = "accounts", key = "#accountId + '|' + #videoGamesIds")
     public void addGamesToUserAccount(Long accountId, Long[] videoGamesIds) {
         try {
             Account account = accountRepository.getAccountById(accountId)

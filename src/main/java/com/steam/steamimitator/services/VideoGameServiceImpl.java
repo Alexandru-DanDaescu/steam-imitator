@@ -9,6 +9,7 @@ import com.steam.steamimitator.models.entities.VideoGame;
 import com.steam.steamimitator.repositories.VideoGameRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -68,7 +69,7 @@ public class VideoGameServiceImpl implements VideoGameService {
     }
 
     @Override
-    @CacheEvict(value = "videoGames", key = "#id")
+    @CachePut(value = "videoGames", key = "#id")
     public VideoGameDTO updateVideoGame(Long id, VideoGameDTO videoGameDTO) {
         try {
             VideoGame updatedVideoGame = videoGameRepository.findById(id)
