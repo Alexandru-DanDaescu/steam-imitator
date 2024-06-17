@@ -7,7 +7,6 @@ import com.steam.steamimitator.exceptions.account.AccountUpdateException;
 import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
 import com.steam.steamimitator.exceptions.videogame.VideoGameNotFoundException;
 import com.steam.steamimitator.models.dtos.AccountDTO;
-import com.steam.steamimitator.models.dtos.VideoGameDTO;
 import com.steam.steamimitator.models.entities.Account;
 import com.steam.steamimitator.models.entities.Client;
 import com.steam.steamimitator.models.entities.VideoGame;
@@ -23,10 +22,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -54,14 +51,10 @@ public class AccountServiceImpl implements AccountService {
                 accountRepository.existsByUserName(accountDTO.getUserName())) {
             throw new AccountCreateException("Account with this email or password already exists.");
         }
-
         Account account = objectMapper.convertValue(accountDTO, Account.class);
 
-        Account savedAccountEntity = null;
+        Account savedAccountEntity = accountRepository.save(account);
 
-        if (account.getUserName() != null || account.getPassword() != null || account.getEmail() != null) {
-            savedAccountEntity = accountRepository.save(account);
-        }
         return convertToDTO(savedAccountEntity);
     }
 
@@ -90,7 +83,7 @@ public class AccountServiceImpl implements AccountService {
     @CachePut(value = "accounts", key = "#id")
     public AccountDTO updateAccount(Long id, AccountDTO accountDTO) {
         try {
-            Account updatedAccount = accountRepository.findById(id)
+            Account updatedAccount = accountRepository.getAccountById(id)
                     .map(account -> updateAccountValues(account, accountDTO))
                     .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id + ID_NOT_FOUND));
             Account savedAccount = accountRepository.save(updatedAccount);
@@ -110,11 +103,11 @@ public class AccountServiceImpl implements AccountService {
                     .orElseThrow(() -> new ClientNotFoundException("Client with id: " + clientId + ID_NOT_FOUND));
 
             Account account = accountRepository.getAccountById(accountId)
-                    .orElseThrow(() -> new AccountNotFoundException("account with id:" + accountId + ID_NOT_FOUND));
+                    .orElseThrow(() -> new AccountNotFoundException("Account with id:" + accountId + ID_NOT_FOUND));
 
             account.setClient(client);
-
             accountRepository.save(account);
+
         } catch (ClientNotFoundException | AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
