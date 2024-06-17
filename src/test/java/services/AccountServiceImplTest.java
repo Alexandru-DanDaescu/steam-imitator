@@ -79,7 +79,7 @@ class AccountServiceImplTest {
 
     @Test
     @DisplayName("Accounts retrieved successfully")
-    void testGetAccountsAndCache() {
+    void testGetAccounts() {
         Account account1 = new Account();
         Account account2 = new Account();
         Account account3 = new Account();
