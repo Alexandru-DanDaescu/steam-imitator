@@ -10,19 +10,12 @@ import com.steam.steamimitator.repositories.ClientRepository;
 import com.steam.steamimitator.repositories.VideoGameRepository;
 import com.steam.steamimitator.services.AccountServiceImpl;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
-
-import org.springframework.data.redis.connection.RedisServer;
-
-import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,7 +26,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@EnableCaching
 class AccountServiceImplTest {
 
     @Mock
