@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,6 +24,9 @@ public class VideoGame {
 
     @Column(name = "title")
     private String title;
+
+    @Column(name = "release_date")
+    private LocalDate releaseDate;
 
     @Column(name = "developer")
     private String developer;

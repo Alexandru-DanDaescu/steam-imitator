@@ -7,6 +7,7 @@ import com.steam.steamimitator.exceptions.account.AccountUpdateException;
 import com.steam.steamimitator.exceptions.client.ClientNotFoundException;
 import com.steam.steamimitator.exceptions.videogame.VideoGameNotFoundException;
 import com.steam.steamimitator.models.dtos.AccountDTO;
+import com.steam.steamimitator.models.dtos.VideoGameDTO;
 import com.steam.steamimitator.models.entities.Account;
 import com.steam.steamimitator.models.entities.Client;
 import com.steam.steamimitator.models.entities.VideoGame;
@@ -21,8 +22,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 @Slf4j
@@ -74,6 +77,24 @@ public class AccountServiceImpl implements AccountService {
                 throw new AccountNotFoundException("Accounts can't be found because they don't exist.");
             }
             return accountDTOList;
+        } catch (AccountNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @Override
+    @Cacheable(value = "accountVideoGamesDates")
+    public List<VideoGameDTO> getVideoGamesBetweenDates(Long accountId, LocalDate startDate, LocalDate endDate) {
+        try {
+            Account account = accountRepository.getAccountById(accountId)
+                    .orElseThrow(() -> new AccountNotFoundException("Account with id: " + accountId + ID_NOT_FOUND));
+
+            Set<VideoGame> allGames = account.getVideoGames();
+
+            return allGames.stream()
+                    .filter(game -> !game.getReleaseDate().isBefore(startDate) && !game.getReleaseDate().isAfter(endDate))
+                    .map(this::convertToDTO)
+                    .toList();
         } catch (AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -166,5 +187,8 @@ public class AccountServiceImpl implements AccountService {
         return objectMapper.convertValue(account, AccountDTO.class);
     }
 
+    private VideoGameDTO convertToDTO(VideoGame videoGame) {
+        return objectMapper.convertValue(videoGame, VideoGameDTO.class);
+    }
 }
 

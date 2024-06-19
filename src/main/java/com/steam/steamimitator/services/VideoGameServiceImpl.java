@@ -99,6 +99,7 @@ public class VideoGameServiceImpl implements VideoGameService {
 
     private VideoGame updateVideoGameValues(VideoGame videoGame, VideoGameDTO videoGameDTO) {
         videoGame.setTitle(videoGameDTO.getTitle());
+        videoGame.setReleaseDate(videoGameDTO.getReleaseDate());
         videoGame.setDeveloper(videoGameDTO.getDeveloper());
         videoGame.setPublisher(videoGameDTO.getPublisher());
         videoGame.setPrice(videoGameDTO.getPrice());

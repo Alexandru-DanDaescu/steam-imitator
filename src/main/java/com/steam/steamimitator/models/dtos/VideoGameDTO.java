@@ -5,9 +5,11 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Set;
 
 @Data
@@ -18,6 +20,10 @@ public class VideoGameDTO implements Serializable {
 
     @NotEmpty(message = "Video game title field cannot be empty")
     private String title;
+
+    @NotNull(message = "Video game release date field is required")
+    @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
+    private LocalDate releaseDate;
 
     @NotEmpty(message = "Video game developer field cannot be empty")
     private String developer;
