@@ -22,11 +22,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Service
@@ -54,14 +54,10 @@ public class AccountServiceImpl implements AccountService {
                 accountRepository.existsByUserName(accountDTO.getUserName())) {
             throw new AccountCreateException("Account with this email or password already exists.");
         }
-
         Account account = objectMapper.convertValue(accountDTO, Account.class);
 
-        Account savedAccountEntity = null;
+        Account savedAccountEntity = accountRepository.save(account);
 
-        if (account.getUserName() != null || account.getPassword() != null || account.getEmail() != null) {
-            savedAccountEntity = accountRepository.save(account);
-        }
         return convertToDTO(savedAccountEntity);
     }
 
@@ -87,10 +83,28 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Cacheable(value = "accountVideoGamesDates")
+    public List<VideoGameDTO> getVideoGamesBetweenDates(Long accountId, LocalDate startDate, LocalDate endDate) {
+        try {
+            Account account = accountRepository.getAccountById(accountId)
+                    .orElseThrow(() -> new AccountNotFoundException("Account with id: " + accountId + ID_NOT_FOUND));
+
+            Set<VideoGame> allGames = account.getVideoGames();
+
+            return allGames.stream()
+                    .filter(game -> !game.getReleaseDate().isBefore(startDate) && !game.getReleaseDate().isAfter(endDate))
+                    .map(this::convertToDTO)
+                    .toList();
+        } catch (AccountNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
+        }
+    }
+
+    @Override
     @CachePut(value = "accounts", key = "#id")
     public AccountDTO updateAccount(Long id, AccountDTO accountDTO) {
         try {
-            Account updatedAccount = accountRepository.findById(id)
+            Account updatedAccount = accountRepository.getAccountById(id)
                     .map(account -> updateAccountValues(account, accountDTO))
                     .orElseThrow(() -> new AccountNotFoundException("Account with id: " + id + ID_NOT_FOUND));
             Account savedAccount = accountRepository.save(updatedAccount);
@@ -110,11 +124,11 @@ public class AccountServiceImpl implements AccountService {
                     .orElseThrow(() -> new ClientNotFoundException("Client with id: " + clientId + ID_NOT_FOUND));
 
             Account account = accountRepository.getAccountById(accountId)
-                    .orElseThrow(() -> new AccountNotFoundException("account with id:" + accountId + ID_NOT_FOUND));
+                    .orElseThrow(() -> new AccountNotFoundException("Account with id:" + accountId + ID_NOT_FOUND));
 
             account.setClient(client);
-
             accountRepository.save(account);
+
         } catch (ClientNotFoundException | AccountNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(), e);
         }
@@ -173,5 +187,8 @@ public class AccountServiceImpl implements AccountService {
         return objectMapper.convertValue(account, AccountDTO.class);
     }
 
+    private VideoGameDTO convertToDTO(VideoGame videoGame) {
+        return objectMapper.convertValue(videoGame, VideoGameDTO.class);
+    }
 }
 
