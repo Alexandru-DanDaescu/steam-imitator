@@ -2,6 +2,7 @@ package services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steam.steamimitator.models.dtos.AccountDTO;
+import com.steam.steamimitator.models.dtos.VideoGameDTO;
 import com.steam.steamimitator.models.entities.Account;
 import com.steam.steamimitator.models.entities.Client;
 import com.steam.steamimitator.models.entities.VideoGame;
@@ -97,6 +98,37 @@ class AccountServiceImplTest {
         assertTrue(accountDTOSInDB.contains(accountDTO3));
 
         verify(accountRepository, times(1)).findAll();
+    }
+
+    @Test
+    @DisplayName("VideoGames between dates found successfully")
+    void testGetVideoGamesBetweenDates() {
+        Account account = account();
+
+        LocalDate startDate = LocalDate.of(2020,1,1);
+        LocalDate endDate = LocalDate.of(2021,1,1);
+
+        VideoGame videoGame1 = new VideoGame(1L,
+                "Game 1",
+                LocalDate.of(2020, 6, 15),
+                "Dev 1", "Pub 1",
+                59.99, Set.of("Action"),
+                "Genre 1", Set.of("EN"), new HashSet<>());
+
+        VideoGame videoGame2 = new VideoGame(2L,
+                "Game 2",
+                LocalDate.of(2020, 6, 15),
+                "Dev 2", "Pub 2",
+                49.99, Set.of("Adventure"),
+                "Genre 2", Set.of("EN"), new HashSet<>());
+
+        account.setVideoGames(Set.of(videoGame1, videoGame2));
+
+        when(accountRepository.getAccountById(account.getId())).thenReturn(Optional.of(account));
+
+        List<VideoGameDTO> result = accountServiceImpl.getVideoGamesBetweenDates(account.getId(), startDate, endDate);
+
+        assertEquals(2, result.size());
     }
 
     @Test
