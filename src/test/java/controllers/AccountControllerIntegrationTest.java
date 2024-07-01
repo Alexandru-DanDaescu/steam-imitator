@@ -18,8 +18,8 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = SteamImitatorApplication.class)
@@ -87,6 +87,22 @@ class AccountControllerIntegrationTest {
                 .andExpect(jsonPath("$[1].password").value(accountDTO2.getPassword()))
                 .andExpect(jsonPath("$[1].email").value(accountDTO2.getEmail()))
                 .andExpect(jsonPath("$[1].createdAt").value("2015-03-14T08:10:50"));
+    }
+
+    @Test
+    @DisplayName("When adding games to user account, return status code 200 and success message")
+    void whenAddGamesToUserAccountTest() throws Exception {
+        Long accountId = 1L;
+        Long[] videoGamesIds = {1L, 2L, 3L};
+
+        String message = "Video games with ids: [1, 2, 3] added successfully to account with id: 1";
+
+        mockMvc.perform(patch("/api/account-video-games/{accountId}/{videoGamesIds}", accountId, "1,2,3")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(message));
+
+        verify(accountService).addGamesToUserAccount(accountId, videoGamesIds);
     }
 
     private static AccountDTO createAccountDTO() {
