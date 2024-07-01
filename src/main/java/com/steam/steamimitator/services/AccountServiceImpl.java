@@ -141,15 +141,14 @@ public class AccountServiceImpl implements AccountService {
             Account account = accountRepository.getAccountById(accountId)
                     .orElseThrow(() -> new VideoGameNotFoundException("Account with id:" + accountId + ID_NOT_FOUND));
 
-            for(Long videoGameId : videoGamesIds) {
+            for (Long videoGameId : videoGamesIds) {
                 VideoGame videoGame = videoGameRepository.findById(videoGameId)
                         .orElseThrow(() -> new VideoGameNotFoundException("Videogame with id:" + videoGameId + ID_NOT_FOUND));
 
-                if(!account.getVideoGames().contains(videoGame)) {
+                if (!account.getVideoGames().contains(videoGame)) {
                     account.getVideoGames().add(videoGame);
                     videoGame.getAccounts().add(account);
-                }
-                else {
+                } else {
                     throw new VideoGameNotFoundException("Video game with id: " + videoGameId +
                             " is already associated with the account.");
                 }

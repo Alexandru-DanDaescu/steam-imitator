@@ -44,7 +44,7 @@ public class ClientController {
                                                                  LocalDate dateOfBirth,
                                                                  @PathVariable String gender) {
 
-        List<ClientDTO> clientDTOList = clientService.sortClientsByCriteria(fullName,dateOfBirth,gender);
+        List<ClientDTO> clientDTOList = clientService.sortClientsByCriteria(fullName, dateOfBirth, gender);
 
         if (clientDTOList.isEmpty()) {
             return ResponseEntity.noContent().build();

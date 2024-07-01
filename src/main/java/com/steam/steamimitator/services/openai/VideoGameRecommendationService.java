@@ -22,8 +22,8 @@ public class VideoGameRecommendationService {
     public String generateRecommendations(Account account) {
         Map<String, Integer> tagFrequency = new HashMap<>();
 
-        for(VideoGame game : account.getVideoGames()) {
-            for(String tag : game.getTags()) {
+        for (VideoGame game : account.getVideoGames()) {
+            for (String tag : game.getTags()) {
                 tagFrequency.put(tag, tagFrequency.getOrDefault(tag, 0) + 1);
             }
         }

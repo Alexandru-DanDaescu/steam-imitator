@@ -39,13 +39,11 @@ public class AccountController {
         }
     }
 
-    @GetMapping("account-video-games/{accountId}/{startDate}/{endDate}")
+    @GetMapping("/account-video-games-dates/{accountId}/{startDate}/{endDate}")
     public ResponseEntity<List<VideoGameDTO>> getVideoGamesBetweenDates(@PathVariable Long accountId,
-                                                                        @PathVariable
-                                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                        @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                         LocalDate startDate,
-                                                                        @PathVariable
-                                                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+                                                                        @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
                                                                         LocalDate endDate) {
         List<VideoGameDTO> videoGameDTOList = accountService.getVideoGamesBetweenDates(accountId, startDate, endDate);
         return ResponseEntity.ok(videoGameDTOList);
@@ -60,16 +58,13 @@ public class AccountController {
     @PatchMapping("/accounts/{accountId}/clients/{clientId}")
     public ResponseEntity<String> addClientToAccount(@PathVariable Long clientId, @PathVariable Long accountId) {
         accountService.addClientToAccount(clientId, accountId);
-        return ResponseEntity.ok("Client with id: " + clientId +
-                " successfully added to account with id: " + accountId);
+        return ResponseEntity.ok("Client with id: " + clientId + " successfully added to account with id: " + accountId);
     }
 
     @PatchMapping("/account-video-games/{accountId}/{videoGamesIds}")
-    public ResponseEntity<String> addGamesToUserAccount(@PathVariable Long accountId,
-                                                        @PathVariable Long[] videoGamesIds) {
+    public ResponseEntity<String> addGamesToUserAccount(@PathVariable Long accountId, @PathVariable Long[] videoGamesIds) {
         accountService.addGamesToUserAccount(accountId, videoGamesIds);
-        return ResponseEntity.ok("Video games with ids: " +
-                Arrays.toString(videoGamesIds) + " added successfully to account with id: " + accountId);
+        return ResponseEntity.ok("Video games with ids: " + Arrays.toString(videoGamesIds) + " added successfully to account with id: " + accountId);
     }
 
     @DeleteMapping("/accounts/{id}")

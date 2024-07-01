@@ -81,7 +81,7 @@ class AccountServiceImplTest {
         AccountDTO accountDTO2 = new AccountDTO();
         AccountDTO accountDTO3 = new AccountDTO();
 
-        List<Account> allAccounts = Arrays.asList(account1,account2,account3);
+        List<Account> allAccounts = Arrays.asList(account1, account2, account3);
 
         when(accountRepository.findAll()).thenReturn(allAccounts);
 
@@ -105,8 +105,8 @@ class AccountServiceImplTest {
     void testGetVideoGamesBetweenDates() {
         Account account = account();
 
-        LocalDate startDate = LocalDate.of(2020,1,1);
-        LocalDate endDate = LocalDate.of(2021,1,1);
+        LocalDate startDate = LocalDate.of(2020, 1, 1);
+        LocalDate endDate = LocalDate.of(2021, 1, 1);
 
         VideoGame videoGame1 = new VideoGame(1L,
                 "Game 1",
@@ -173,7 +173,7 @@ class AccountServiceImplTest {
         List<VideoGame> videoGameList = new ArrayList<>();
 
 
-        for (Long gameId : videoGamesIds){
+        for (Long gameId : videoGamesIds) {
             VideoGame videoGame = new VideoGame();
             videoGame.setId(gameId);
             videoGameList.add(videoGame);
@@ -186,7 +186,7 @@ class AccountServiceImplTest {
         assertTrue(account.getVideoGames().containsAll(videoGameList));
 
         verify(accountRepository, times(1)).getAccountById(account.getId());
-        for (Long gameId : videoGamesIds){
+        for (Long gameId : videoGamesIds) {
             verify(videoGameRepository, times(1)).findById(gameId);
         }
         verify(accountRepository, times(1)).save(account);
@@ -214,7 +214,7 @@ class AccountServiceImplTest {
         return account;
     }
 
-    private static Client client(){
+    private static Client client() {
         Client client = new Client();
         client.setId(1L);
         client.setFullName("test name");
