@@ -39,7 +39,7 @@ public class AccountController {
         }
     }
 
-    @GetMapping("account-video-games/{accountId}/{startDate}/{endDate}")
+    @GetMapping("account-video-games-dates/{accountId}/{startDate}/{endDate}")
     public ResponseEntity<List<VideoGameDTO>> getVideoGamesBetweenDates(@PathVariable Long accountId,
                                                                         @PathVariable
                                                                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
