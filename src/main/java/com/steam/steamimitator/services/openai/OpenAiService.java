@@ -2,6 +2,7 @@ package com.steam.steamimitator.services.openai;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,10 +23,12 @@ public class OpenAiService {
     private final RestTemplate restTemplate;
     private static final String APIKEY = "YOUR_KEY_HERE";
     private static final String OPEN_AI_URL = "https://api.openai.com/v1/chat/completions";
-    private final RateLimiter rateLimiter = new RateLimiter(10.0);
+    private final RateLimiter rateLimiter;
 
-    public OpenAiService(RestTemplateBuilder restTemplateBuilder) {
+    @Autowired
+    public OpenAiService(RestTemplateBuilder restTemplateBuilder, RateLimiter rateLimiter) {
         this.restTemplate = restTemplateBuilder.build();
+        this.rateLimiter = rateLimiter;
     }
 
 

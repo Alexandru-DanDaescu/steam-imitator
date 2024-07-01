@@ -3,26 +3,30 @@ package com.steam.steamimitator.services.openai;
 public class RateLimiter {
 
     private final double permitsPerMinute;
-    private long lastRequestTime;
+    private long nextAvailableTime;
+    private final Object lock = new Object();
 
     public RateLimiter(double permitsPerMinute) {
         this.permitsPerMinute = permitsPerMinute;
-        this.lastRequestTime = System.currentTimeMillis();
+        this.nextAvailableTime = System.currentTimeMillis();
     }
 
-    public synchronized void acquire() {
-        long currentTime = System.currentTimeMillis();
-        double timeElapsed = (currentTime - lastRequestTime) / 60000.0;
-
-        if (timeElapsed < 1.0 / permitsPerMinute) {
-            long sleepTime = (long) ((1.0 / permitsPerMinute - timeElapsed) * 60000);
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+    public void acquire() {
+        synchronized (lock) {
+            while (true) {
+                long currentTime = System.currentTimeMillis();
+                double timeElapsed = (currentTime - nextAvailableTime) / 60000.0;
+                if (timeElapsed >= 1.0 / permitsPerMinute) {
+                    nextAvailableTime = currentTime;
+                    break;
+                }
+                long sleepTime = (long) ((1.0 / permitsPerMinute - timeElapsed) * 60000);
+                try {
+                    lock.wait(sleepTime);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
-
-        lastRequestTime = System.currentTimeMillis();
     }
 }
