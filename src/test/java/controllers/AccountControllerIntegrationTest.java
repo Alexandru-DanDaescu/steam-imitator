@@ -48,8 +48,8 @@ class AccountControllerIntegrationTest {
 
         given(accountService.createAccount(any(AccountDTO.class))).willReturn(mockAccountDTO);
         mockMvc.perform(post("/api/accounts")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(accountJson))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(accountJson))
                 .andExpect(status().isCreated())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.userName").value(mockAccountDTO.getUserName()))
@@ -75,7 +75,7 @@ class AccountControllerIntegrationTest {
         given(accountService.getAccounts()).willReturn(accountDTOList);
 
         mockMvc.perform(get("/api/accounts")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(accountDTO1.getId()))
                 .andExpect(jsonPath("$[0].userName").value(accountDTO1.getUserName()))
@@ -98,7 +98,7 @@ class AccountControllerIntegrationTest {
         String message = "Video games with ids: [1, 2, 3] added successfully to account with id: 1";
 
         mockMvc.perform(patch("/api/account-video-games/{accountId}/{videoGamesIds}", accountId, "1,2,3")
-                .contentType(MediaType.APPLICATION_JSON))
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(message));
 

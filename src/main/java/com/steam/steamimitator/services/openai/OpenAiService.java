@@ -24,10 +24,9 @@ public class OpenAiService {
     private static final String OPEN_AI_URL = "https://api.openai.com/v1/chat/completions";
     private final RateLimiter rateLimiter = new RateLimiter(10.0);
 
-    public OpenAiService(RestTemplateBuilder restTemplateBuilder){
+    public OpenAiService(RestTemplateBuilder restTemplateBuilder) {
         this.restTemplate = restTemplateBuilder.build();
     }
-
 
 
     public String getRecommendations(String prompt) {
